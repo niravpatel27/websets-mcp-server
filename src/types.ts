@@ -90,8 +90,7 @@ export interface CreateWebsetParams {
 }
 
 export interface UpdateWebsetParams {
-  name?: string;
-  description?: string;
+  metadata: Record<string, string> | null;
 }
 
 export interface ListWebsetsResponse {
@@ -152,10 +151,21 @@ export interface CreateEnrichmentParams {
 }
 
 export interface CreateMonitorParams {
-  name?: string;
-  schedule: string;
-  behavior: 'search' | 'refresh';
-  enabled?: boolean;
+  websetId: string;
+  cadence: {
+    cron: string;
+    timezone?: string;
+  };
+  behavior: {
+    type: 'search';
+    config?: {
+      query?: string;
+      criteria?: Array<{ description: string }>;
+      entity?: string;
+      count?: number;
+      behavior?: 'append' | 'override';
+    };
+  };
 }
 
 export interface UpdateMonitorParams {

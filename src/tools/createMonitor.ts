@@ -8,15 +8,15 @@ import { createRequestLogger } from "../utils/logger.js";
 export function registerCreateMonitorTool(server: McpServer, config?: { exaApiKey?: string }): void {
   server.tool(
     "create_monitor",
-    "Create a monitor to automatically update a webset on a schedule. Monitors can either search for new items or refresh existing ones.",
+    "Create a monitor to automatically update a webset on a schedule. Monitors run search operations to find new items.",
     {
       websetId: z.string().describe("The ID or externalId of the webset"),
-      name: z.string().optional().describe("Name for the monitor"),
-      schedule: z.string().describe("Cron expression for the schedule (e.g., '0 9 * * 1' for every Monday at 9am)"),
-      behavior: z.enum(['search', 'refresh']).describe("'search' to find new items, 'refresh' to update existing items"),
-      enabled: z.boolean().optional().describe("Whether the monitor should be enabled immediately (default: true)")
+      cron: z.string().describe("Cron expression for the schedule (e.g., '0 9 * * 1' for every Monday at 9am). Must be valid Unix cron with 5 fields."),
+      timezone: z.string().optional().describe("IANA timezone (e.g., 'America/New_York'). Defaults to 'Etc/UTC'"),
+      query: z.string().optional().describe("The search query to use. Defaults to the last search query used."),
+      count: z.number().optional().describe("Maximum number of results to find per run")
     },
-    async ({ websetId, name, schedule, behavior, enabled }) => {
+    async ({ websetId, cron, timezone, query, count }) => {
       const requestId = `create_monitor-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
       const logger = createRequestLogger(requestId, 'create_monitor');
       
@@ -34,16 +34,24 @@ export function registerCreateMonitorTool(server: McpServer, config?: { exaApiKe
         });
 
         const params: CreateMonitorParams = {
-          name,
-          schedule,
-          behavior,
-          enabled: enabled !== undefined ? enabled : true
+          websetId,
+          cadence: {
+            cron,
+            ...(timezone && { timezone })
+          },
+          behavior: {
+            type: 'search',
+            config: {
+              ...(query && { query }),
+              ...(count && { count })
+            }
+          }
         };
         
         logger.log("Sending create monitor request to API");
         
         const response = await axiosInstance.post<WebsetMonitor>(
-          API_CONFIG.ENDPOINTS.WEBSET_MONITORS(websetId),
+          API_CONFIG.ENDPOINTS.MONITORS,
           params
         );
         

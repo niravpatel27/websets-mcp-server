@@ -8,13 +8,12 @@ import { createRequestLogger } from "../utils/logger.js";
 export function registerUpdateWebsetTool(server: McpServer, config?: { exaApiKey?: string }): void {
   server.tool(
     "update_webset",
-    "Update a webset's name or description. Use this to rename or add/update metadata for an existing webset.",
+    "Update a webset's metadata. Use this to add or update custom key-value pairs associated with the webset.",
     {
       id: z.string().describe("The ID or externalId of the webset to update"),
-      name: z.string().optional().describe("New name for the webset"),
-      description: z.string().optional().describe("New description for the webset")
+      metadata: z.record(z.string()).describe("Key-value pairs to associate with the webset. Each value must be a string with max length 1000.")
     },
-    async ({ id, name, description }) => {
+    async ({ id, metadata }) => {
       const requestId = `update_webset-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
       const logger = createRequestLogger(requestId, 'update_webset');
       
@@ -31,9 +30,9 @@ export function registerUpdateWebsetTool(server: McpServer, config?: { exaApiKey
           timeout: 30000
         });
 
-        const params: UpdateWebsetParams = {};
-        if (name) params.name = name;
-        if (description) params.description = description;
+        const params: UpdateWebsetParams = {
+          metadata: metadata || null
+        };
         
         logger.log("Sending update webset request to API");
         
