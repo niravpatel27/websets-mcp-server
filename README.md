@@ -17,15 +17,40 @@ Websets are collections of web entities (companies, people, research papers) tha
 
 This MCP server provides the following tools:
 
+### Webset Management
 | Tool | Description |
 | ---- | ----------- |
 | `create_webset` | Create a new webset collection with optional search and enrichments |
 | `list_websets` | List all your websets with pagination support |
 | `get_webset` | Get details about a specific webset |
-| `update_webset` | Update a webset's name or description |
+| `update_webset` | Update a webset's metadata |
 | `delete_webset` | Delete a webset and all its items |
+
+### Item Management
+| Tool | Description |
+| ---- | ----------- |
 | `list_webset_items` | List all items (entities) in a webset |
+| `get_item` | Get a specific item from a webset with all enrichment data |
+
+### Search Operations
+| Tool | Description |
+| ---- | ----------- |
+| `create_search` | Create a new search to find and add items to a webset |
+| `get_search` | Get details about a specific search including status and progress |
+| `cancel_search` | Cancel a running search operation |
+
+### Enrichment Operations
+| Tool | Description |
+| ---- | ----------- |
 | `create_enrichment` | Add a new data enrichment to extract custom information |
+| `get_enrichment` | Get details about a specific enrichment |
+| `update_enrichment` | Update an enrichment's metadata |
+| `delete_enrichment` | Delete an enrichment and all its data |
+| `cancel_enrichment` | Cancel a running enrichment operation |
+
+### Monitoring
+| Tool | Description |
+| ---- | ----------- |
 | `create_monitor` | Set up automated monitoring to keep the webset updated |
 
 ## Installation
@@ -196,11 +221,9 @@ Creates a new webset collection with optional automatic population and enrichmen
   "searchCount": 50,
   "enrichments": [
     {
-      "name": "Valuation",
       "description": "Current company valuation in USD"
     },
     {
-      "name": "Founders",
       "description": "Names of company founders"
     }
   ]
@@ -213,14 +236,12 @@ Adds a new data enrichment to extract custom information from each webset item.
 
 **Parameters:**
 - `websetId`: The ID of the webset
-- `name`: Column name for the enrichment
 - `description`: Detailed description of what to extract
 
 **Example:**
 ```json
 {
   "websetId": "webset_abc123",
-  "name": "Employee Count",
   "description": "Total number of full-time employees as of the most recent data"
 }
 ```

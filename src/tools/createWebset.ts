@@ -17,8 +17,11 @@ export function registerCreateWebsetTool(server: McpServer, config?: { exaApiKey
       searchCount: z.number().optional().describe("Number of items to search for (default: 10)"),
       searchCriteria: z.array(z.string()).optional().describe("Additional criteria to filter search results"),
       enrichments: z.array(z.object({
-        name: z.string().describe("Name of the enrichment column"),
-        description: z.string().describe("What data to extract (e.g., 'company revenue', 'CEO name')")
+        description: z.string().describe("What data to extract (e.g., 'Annual revenue in USD', 'Number of full-time employees')"),
+        format: z.enum(['text', 'date', 'number', 'options', 'email', 'phone', 'url']).optional().describe("Format of the enrichment response"),
+        options: z.array(z.object({
+          label: z.string()
+        })).optional().describe("When format is 'options', the different options to choose from")
       })).optional().describe("Data enrichments to automatically extract for each item")
     },
     async ({ name, description, externalId, searchQuery, searchCount, searchCriteria, enrichments }) => {

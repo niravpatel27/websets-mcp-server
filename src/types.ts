@@ -80,8 +80,9 @@ export interface CreateWebsetParams {
     criteria?: string[];
   };
   enrichments?: Array<{
-    name: string;
     description: string;
+    format?: 'text' | 'date' | 'number' | 'options' | 'email' | 'phone' | 'url';
+    options?: Array<{ label: string }>;
   }>;
   monitors?: Array<{
     schedule: string;
@@ -140,14 +141,22 @@ export interface PreviewWebsetResponse {
 }
 
 export interface CreateSearchParams {
-  query?: string;
+  query: string;
   count?: number;
-  criteria?: string[];
+  entity?: {
+    type: 'company' | 'person' | 'article' | 'research_paper' | 'custom';
+  };
+  criteria?: Array<{ description: string }>;
+  behavior?: 'override' | 'append';
+  recall?: boolean;
+  metadata?: Record<string, string>;
 }
 
 export interface CreateEnrichmentParams {
-  name: string;
   description: string;
+  format?: 'text' | 'date' | 'number' | 'options' | 'email' | 'phone' | 'url';
+  options?: Array<{ label: string }>;
+  metadata?: Record<string, string>;
 }
 
 export interface CreateMonitorParams {

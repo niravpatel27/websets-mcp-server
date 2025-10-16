@@ -11,14 +11,18 @@ export function registerCreateEnrichmentTool(server: McpServer, config?: { exaAp
     "Create a new enrichment for a webset. Enrichments automatically extract custom data from each item using AI agents (e.g., 'company revenue', 'CEO name', 'funding amount').",
     {
       websetId: z.string().describe("The ID or externalId of the webset"),
-      name: z.string().describe("Name of the enrichment column (e.g., 'Revenue', 'Employee Count')"),
-      description: z.string().describe("Detailed description of what data to extract (e.g., 'Annual revenue in USD', 'Number of full-time employees')")
+      description: z.string().describe("Detailed description of what data to extract (e.g., 'Annual revenue in USD', 'Number of full-time employees')"),
+      format: z.enum(['text', 'date', 'number', 'options', 'email', 'phone', 'url']).optional().describe("Format of the enrichment response. API auto-selects if not specified."),
+      options: z.array(z.object({
+        label: z.string()
+      })).optional().describe("When format is 'options', the different options for the enrichment agent to choose from (1-150 options)"),
+      metadata: z.record(z.string(), z.string()).optional().describe("Key-value pairs to associate with this enrichment")
     },
-    async ({ websetId, name, description }) => {
+    async ({ websetId, description, format, options, metadata }) => {
       const requestId = `create_enrichment-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
       const logger = createRequestLogger(requestId, 'create_enrichment');
       
-      logger.start(`Creating enrichment "${name}" for webset: ${websetId}`);
+      logger.start(`Creating enrichment for webset: ${websetId}`);
       
       try {
         const axiosInstance = axios.create({
@@ -32,8 +36,10 @@ export function registerCreateEnrichmentTool(server: McpServer, config?: { exaAp
         });
 
         const params: CreateEnrichmentParams = {
-          name,
-          description
+          description,
+          ...(format && { format }),
+          ...(options && { options }),
+          ...(metadata && { metadata })
         };
         
         logger.log("Sending create enrichment request to API");

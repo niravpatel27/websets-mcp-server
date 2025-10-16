@@ -9,7 +9,15 @@ import { registerGetWebsetTool } from "./tools/getWebset.js";
 import { registerUpdateWebsetTool } from "./tools/updateWebset.js";
 import { registerDeleteWebsetTool } from "./tools/deleteWebset.js";
 import { registerListItemsTool } from "./tools/listItems.js";
+import { registerGetItemTool } from "./tools/getItem.js";
+import { registerCreateSearchTool } from "./tools/createSearch.js";
+import { registerGetSearchTool } from "./tools/getSearch.js";
+import { registerCancelSearchTool } from "./tools/cancelSearch.js";
 import { registerCreateEnrichmentTool } from "./tools/createEnrichment.js";
+import { registerGetEnrichmentTool } from "./tools/getEnrichment.js";
+import { registerUpdateEnrichmentTool } from "./tools/updateEnrichment.js";
+import { registerDeleteEnrichmentTool } from "./tools/deleteEnrichment.js";
+import { registerCancelEnrichmentTool } from "./tools/cancelEnrichment.js";
 import { registerCreateMonitorTool } from "./tools/createMonitor.js";
 import { log } from "./utils/logger.js";
 
@@ -31,7 +39,15 @@ const availableTools = {
   'update_webset': { name: 'Update Webset', description: 'Update webset metadata', enabled: true },
   'delete_webset': { name: 'Delete Webset', description: 'Delete a webset', enabled: true },
   'list_webset_items': { name: 'List Items', description: 'List items in a webset', enabled: true },
+  'get_item': { name: 'Get Item', description: 'Get a specific item from a webset', enabled: true },
+  'create_search': { name: 'Create Search', description: 'Create a new search for a webset', enabled: true },
+  'get_search': { name: 'Get Search', description: 'Get search details and status', enabled: true },
+  'cancel_search': { name: 'Cancel Search', description: 'Cancel a running search', enabled: true },
   'create_enrichment': { name: 'Create Enrichment', description: 'Add data enrichment to webset', enabled: true },
+  'get_enrichment': { name: 'Get Enrichment', description: 'Get enrichment details and status', enabled: true },
+  'update_enrichment': { name: 'Update Enrichment', description: 'Update enrichment metadata', enabled: true },
+  'delete_enrichment': { name: 'Delete Enrichment', description: 'Delete an enrichment', enabled: true },
+  'cancel_enrichment': { name: 'Cancel Enrichment', description: 'Cancel a running enrichment', enabled: true },
   'create_monitor': { name: 'Create Monitor', description: 'Create automated webset monitor', enabled: true },
 };  
 
@@ -106,9 +122,49 @@ export default function ({ config }: { config: z.infer<typeof configSchema> }) {
       registeredTools.push('list_webset_items');
     }
     
+    if (shouldRegisterTool('get_item')) {
+      registerGetItemTool(server, config);
+      registeredTools.push('get_item');
+    }
+    
+    if (shouldRegisterTool('create_search')) {
+      registerCreateSearchTool(server, config);
+      registeredTools.push('create_search');
+    }
+    
+    if (shouldRegisterTool('get_search')) {
+      registerGetSearchTool(server, config);
+      registeredTools.push('get_search');
+    }
+    
+    if (shouldRegisterTool('cancel_search')) {
+      registerCancelSearchTool(server, config);
+      registeredTools.push('cancel_search');
+    }
+    
     if (shouldRegisterTool('create_enrichment')) {
       registerCreateEnrichmentTool(server, config);
       registeredTools.push('create_enrichment');
+    }
+    
+    if (shouldRegisterTool('get_enrichment')) {
+      registerGetEnrichmentTool(server, config);
+      registeredTools.push('get_enrichment');
+    }
+    
+    if (shouldRegisterTool('update_enrichment')) {
+      registerUpdateEnrichmentTool(server, config);
+      registeredTools.push('update_enrichment');
+    }
+    
+    if (shouldRegisterTool('delete_enrichment')) {
+      registerDeleteEnrichmentTool(server, config);
+      registeredTools.push('delete_enrichment');
+    }
+    
+    if (shouldRegisterTool('cancel_enrichment')) {
+      registerCancelEnrichmentTool(server, config);
+      registeredTools.push('cancel_enrichment');
     }
     
     if (shouldRegisterTool('create_monitor')) {
