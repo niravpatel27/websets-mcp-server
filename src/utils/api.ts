@@ -5,6 +5,10 @@ export class ExaApiClient {
   private client: AxiosInstance;
 
   constructor(apiKey: string) {
+    if (!apiKey) {
+      throw new Error("EXA_API_KEY is required. Please provide it in the configuration.");
+    }
+
     this.client = axios.create({
       baseURL: API_CONFIG.BASE_URL,
       headers: {

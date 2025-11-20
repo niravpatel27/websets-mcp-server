@@ -28,9 +28,9 @@ Example call:
     {
       name: z.string().optional().describe("Name for the webset"),
       description: z.string().optional().describe("Description of the webset"),
-      externalId: z.string().optional().describe("Your own identifier for the webset"),
+      externalId: z.string().max(300).optional().describe("Your own identifier for the webset (max 300 chars)"),
       searchQuery: z.string().optional().describe("Natural language query to populate the webset (e.g., 'AI startups in San Francisco')"),
-      searchCount: z.number().optional().describe("Number of items to search for (default: 10)"),
+      searchCount: z.number().int().min(1).optional().describe("Number of items to search for (default: 10, min: 1)"),
       searchCriteria: z.array(z.object({
         description: z.string()
       })).optional().describe("Additional criteria to filter search results. Each criterion is an object with a 'description' field. Example: [{description: 'Founded after 2020'}, {description: 'Has more than 50 employees'}]"),
@@ -49,17 +49,6 @@ Example call:
       logger.start(`Creating webset${name ? ` "${name}"` : ''}`);
       
       try {
-        // Validate input parameters
-        if (searchCount !== undefined && searchCount < 1) {
-          return {
-            content: [{
-              type: "text" as const,
-              text: `Invalid searchCount: ${searchCount}. Must be at least 1.`
-            }],
-            isError: true,
-          };
-        }
-
         const client = new ExaApiClient(config?.exaApiKey || process.env.EXA_API_KEY || '');
 
         const params: CreateWebsetParams = {

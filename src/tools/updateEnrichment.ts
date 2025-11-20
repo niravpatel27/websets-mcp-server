@@ -12,7 +12,7 @@ export function registerUpdateEnrichmentTool(server: McpServer, config?: { exaAp
     {
       websetId: z.string().describe("The ID or externalId of the webset"),
       enrichmentId: z.string().describe("The ID of the enrichment to update"),
-      metadata: z.record(z.string(), z.string()).describe("Key-value pairs to associate with this enrichment. Each value must be a string.")
+      metadata: z.record(z.string(), z.string().max(1000)).describe("Key-value pairs to associate with this enrichment. Each value must be a string.")
     },
     async ({ websetId, enrichmentId, metadata }) => {
       const requestId = `update_enrichment-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;

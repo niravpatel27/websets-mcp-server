@@ -19,7 +19,7 @@ import { registerUpdateEnrichmentTool } from "./tools/updateEnrichment.js";
 import { registerDeleteEnrichmentTool } from "./tools/deleteEnrichment.js";
 import { registerCancelEnrichmentTool } from "./tools/cancelEnrichment.js";
 import { registerCreateMonitorTool } from "./tools/createMonitor.js";
-import { log } from "./utils/logger.js";
+import { log, setDebugEnabled } from "./utils/logger.js";
 
 // Configuration schema for the EXA API key and tool selection
 export const configSchema = z.object({
@@ -69,7 +69,10 @@ const availableTools = {
 export default function ({ config }: { config: z.infer<typeof configSchema> }) {
   try {
     if (config.debug) {
+      setDebugEnabled(true);
       log("Starting Websets MCP Server in debug mode");
+    } else {
+      setDebugEnabled(false);
     }
 
     // Create MCP server

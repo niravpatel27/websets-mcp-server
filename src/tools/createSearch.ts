@@ -25,7 +25,7 @@ Example call:
     {
       websetId: z.string().describe("The ID or externalId of the webset"),
       query: z.string().describe("Natural language query describing what to search for (e.g., 'AI startups in San Francisco')"),
-      count: z.number().optional().describe("Number of items to find (default: 10, min: 1)"),
+      count: z.number().int().min(1).optional().describe("Number of items to find (default: 10, min: 1)"),
       entity: z.object({
         type: z.enum(['company', 'person', 'article', 'research_paper', 'custom']).describe("Type of entity to search for")
       }).optional().describe("Entity type to search for. Must be an object with a 'type' field. Example: {type: 'company'}"),
@@ -43,17 +43,6 @@ Example call:
       logger.start(`Creating search for webset: ${websetId}`);
       
       try {
-        // Validate input parameters before sending to API
-        if (count !== undefined && count < 1) {
-          return {
-            content: [{
-              type: "text" as const,
-              text: `Invalid count: ${count}. Must be at least 1.`
-            }],
-            isError: true,
-          };
-        }
-
         const client = new ExaApiClient(config?.exaApiKey || process.env.EXA_API_KEY || '');
 
         const params: CreateSearchParams = {

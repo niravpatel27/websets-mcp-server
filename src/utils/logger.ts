@@ -1,8 +1,16 @@
 /**
  * Simple logging utility for MCP server
  */
+let isDebugEnabled = false;
+
+export const setDebugEnabled = (enabled: boolean): void => {
+  isDebugEnabled = enabled;
+};
+
 export const log = (message: string): void => {
-  console.error(`[WEBSETS-MCP-DEBUG] ${message}`);
+  if (isDebugEnabled) {
+    console.error(`[WEBSETS-MCP-DEBUG] ${message}`);
+  }
 };
 
 export const createRequestLogger = (requestId: string, toolName: string) => {

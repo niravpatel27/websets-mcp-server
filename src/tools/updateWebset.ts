@@ -11,7 +11,7 @@ export function registerUpdateWebsetTool(server: McpServer, config?: { exaApiKey
     "Update a webset's metadata. Use this to add or update custom key-value pairs associated with the webset.",
     {
       id: z.string().describe("The ID or externalId of the webset to update"),
-      metadata: z.record(z.string()).describe("Key-value pairs to associate with the webset. Each value must be a string with max length 1000.")
+      metadata: z.record(z.string().max(1000)).describe("Key-value pairs to associate with the webset. Each value must be a string with max length 1000.")
     },
     async ({ id, metadata }) => {
       const requestId = `update_webset-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;

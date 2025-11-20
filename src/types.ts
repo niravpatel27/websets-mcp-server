@@ -17,9 +17,9 @@ export interface WebsetItem {
   status: 'pending' | 'verified' | 'failed' | 'enriching' | 'completed';
   properties: {
     name?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
-  enrichments?: Record<string, any>;
+  enrichments?: Record<string, unknown>;
   createdAt: number;
   updatedAt: number;
 }
