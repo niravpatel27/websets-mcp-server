@@ -327,38 +327,6 @@ Get details about an enrichment.
 
 ---
 
-## Tool: update_enrichment
-
-Update an enrichment's metadata.
-
-### Example Call
-```json
-{
-  "websetId": "webset_abc123",
-  "enrichmentId": "enrichment_jkl012",
-  "metadata": {
-    "priority": "high",
-    "verified": "true"
-  }
-}
-```
-
----
-
-## Tool: delete_enrichment
-
-Delete an enrichment from a webset.
-
-### Example Call
-```json
-{
-  "websetId": "webset_abc123",
-  "enrichmentId": "enrichment_jkl012"
-}
-```
-
----
-
 ## Tool: cancel_enrichment
 
 Cancel a running enrichment operation.

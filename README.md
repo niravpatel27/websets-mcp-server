@@ -46,8 +46,6 @@ This MCP server provides the following tools:
 | ---- | ----------- |
 | `create_enrichment` | Add a new data enrichment to extract custom information |
 | `get_enrichment` | Get details about a specific enrichment |
-| `update_enrichment` | Update an enrichment's metadata |
-| `delete_enrichment` | Delete an enrichment and all its data |
 | `cancel_enrichment` | Cancel a running enrichment operation |
 
 ### Monitoring

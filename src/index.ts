@@ -15,8 +15,6 @@ import { registerGetSearchTool } from "./tools/getSearch.js";
 import { registerCancelSearchTool } from "./tools/cancelSearch.js";
 import { registerCreateEnrichmentTool } from "./tools/createEnrichment.js";
 import { registerGetEnrichmentTool } from "./tools/getEnrichment.js";
-import { registerUpdateEnrichmentTool } from "./tools/updateEnrichment.js";
-import { registerDeleteEnrichmentTool } from "./tools/deleteEnrichment.js";
 import { registerCancelEnrichmentTool } from "./tools/cancelEnrichment.js";
 import { registerCreateMonitorTool } from "./tools/createMonitor.js";
 import { log, setDebugEnabled } from "./utils/logger.js";
@@ -45,8 +43,6 @@ const availableTools = {
   'cancel_search': { name: 'Cancel Search', description: 'Cancel a running search', enabled: true },
   'create_enrichment': { name: 'Create Enrichment', description: 'Add data enrichment to webset', enabled: true },
   'get_enrichment': { name: 'Get Enrichment', description: 'Get enrichment details and status', enabled: true },
-  'update_enrichment': { name: 'Update Enrichment', description: 'Update enrichment metadata', enabled: true },
-  'delete_enrichment': { name: 'Delete Enrichment', description: 'Delete an enrichment', enabled: true },
   'cancel_enrichment': { name: 'Cancel Enrichment', description: 'Cancel a running enrichment', enabled: true },
   'create_monitor': { name: 'Create Monitor', description: 'Create automated webset monitor', enabled: true },
 };  
@@ -153,16 +149,6 @@ export default function ({ config }: { config: z.infer<typeof configSchema> }) {
     if (shouldRegisterTool('get_enrichment')) {
       registerGetEnrichmentTool(server, config);
       registeredTools.push('get_enrichment');
-    }
-    
-    if (shouldRegisterTool('update_enrichment')) {
-      registerUpdateEnrichmentTool(server, config);
-      registeredTools.push('update_enrichment');
-    }
-    
-    if (shouldRegisterTool('delete_enrichment')) {
-      registerDeleteEnrichmentTool(server, config);
-      registeredTools.push('delete_enrichment');
     }
     
     if (shouldRegisterTool('cancel_enrichment')) {
